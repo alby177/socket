@@ -6,3 +6,6 @@
 
 # Unignore all dirs
 !*/
+
+# Ignore all files created by mac
+._*

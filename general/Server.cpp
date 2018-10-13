@@ -8,6 +8,7 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <unistd.h>
+#include <fcntl.h>
 
 int main()
 {
@@ -59,22 +60,27 @@ int main()
   int received;
   char msgRcv[100] = "";
 
-  while(1)
+  // Set the socket as non-blocking
+  fcntl(sockfd, F_SETFL, O_NONBLOCK);
+
+  do
   {
     // Accept client connection and verify it
     isock = accept(sockfd, (sockaddr*) &caddr, &clen);
 
-    // Verify accept
+    // Wait for client
     if (isock < 0)
     {
-      std::cout << "Cannot accept connection" << std::endl;
-      close(sockfd);
-      return 0;
+      std::cout << ".";
+      std::cout.flush();
+      usleep(1000000);
     }
+  }while(isock < 0);
 
-    // Client is connected
-    std::cout << "Handling client on socket number " << isock << std::endl;
+  std::cout << "\nClient connected" << std::endl;
 
+  while(1)
+  {
     // Receive message
     received = recv(isock, msgRcv, sizeof(msgRcv), 0);
 
@@ -83,52 +89,49 @@ int main()
     int i = 0;
 
     // Verify message received
-    if (received < 0)
-    {
-      std::cout << "Error receiving message" << std::endl;
-      close(isock);
-    }
-
-    // Message received
-    std::cout << "Message received: " << msgRcv << std::endl;
-
-    // Check for client request to kill server
-    if (strcmp(msgRcv, "Muori") == 0 || strcmp(msgRcv, "muori") == 0)
-    {
-      // Void message
-      char msgVoid[100] = "";
-
-      std::cout << "Client disconnection..." << std::endl;
-
-      // Wait for the client to be disconnected
-      while(recv(isock, msgVoid, sizeof(msgVoid), 0) != 0)
-        std::cout << "|";
-
-      std::cout << std::endl << "Client disconnected!" << std::endl;
-
-      // Close client socket
-      close(isock);
-
-      // Exit the cycle
-      break;
-    }
-    else
-    {
-      // Send dummy message
-      byteSent = send(isock, msgRcv, strlen(msgRcv) + 1, 0);
-
-      // Check for message sent
-      if (byteSent != strlen(msgRcv) + 1)
+    if (received > 0)
       {
-        std::cout << "Message send failed, size " << byteSent << std::endl;
-        close(isock);
-      }
-      else
-      {
-        std::cout << "Message of " << byteSent << " character sent" << std::endl;
-      }
+        std::cout << "Message received: " << msgRcv << std::endl;
+
+        // Check for client request to kill server
+        if (strcmp(msgRcv, "Muori") == 0 || strcmp(msgRcv, "muori") == 0)
+        {
+          // Void message
+          char msgVoid[100] = "";
+
+          std::cout << "Client disconnection..." << std::endl;
+
+          // Wait for the client to be disconnected
+          while(recv(isock, msgVoid, sizeof(msgVoid), 0) != 0)
+            std::cout << "|";
+
+          std::cout << std::endl << "Client disconnected!" << std::endl;
+
+          // Close client socket
+          close(isock);
+
+          // Exit the cycle
+          break;
+        }
+        else
+        {
+          // Send dummy message
+          byteSent = send(isock, msgRcv, strlen(msgRcv) + 1, 0);
+
+          // Check for message sent
+          if (byteSent != strlen(msgRcv) + 1)
+          {
+            std::cout << "Message send failed, size " << byteSent << std::endl;
+            close(isock);
+          }
+          else
+          {
+            std::cout << "Message: \"" << msgRcv << "\" of " << byteSent << " character sent" << std::endl;
+          }
+        }
     }
   }
+
   // Close the connection
   close(sockfd);
   return 0;
