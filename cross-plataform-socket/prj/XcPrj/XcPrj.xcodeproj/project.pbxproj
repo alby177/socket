@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		698D11092183BFB300FBFDF7 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 698D11072183BFB300FBFDF7 /* main.cpp */; };
-		698D110A2183BFB300FBFDF7 /* Server.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 698D11082183BFB300FBFDF7 /* Server.cpp */; };
+		6915F8AF218451370014E827 /* Server.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6915F8AD218451370014E827 /* Server.cpp */; };
+		6915F8B0218451370014E827 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6915F8AE218451370014E827 /* main.cpp */; };
 		698D110C2183C9A900FBFDF7 /* CrossPlatSock in CopyFiles */ = {isa = PBXBuildFile; fileRef = 698D10FC2183BF9000FBFDF7 /* CrossPlatSock */; };
 /* End PBXBuildFile section */
 
@@ -16,7 +16,7 @@
 		698D10FA2183BF9000FBFDF7 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 12;
-			dstPath = "/Volumes/StorEDGE/Alby/Programming/C++/cross-plataform-socket/bin";
+			dstPath = "/Volumes/StorEDGE/Alby/Programming/C++/socket/cross-plataform-socket/bin";
 			dstSubfolderSpec = 0;
 			files = (
 				698D110C2183C9A900FBFDF7 /* CrossPlatSock in CopyFiles */,
@@ -26,10 +26,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6915F8AC218451370014E827 /* Server.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Server.h; sourceTree = "<group>"; };
+		6915F8AD218451370014E827 /* Server.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Server.cpp; sourceTree = "<group>"; };
+		6915F8AE218451370014E827 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		698D10FC2183BF9000FBFDF7 /* CrossPlatSock */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CrossPlatSock; sourceTree = BUILT_PRODUCTS_DIR; };
-		698D11062183BFB300FBFDF7 /* Server.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Server.h; path = ../../../src/Server.h; sourceTree = "<group>"; };
-		698D11072183BFB300FBFDF7 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../../../src/main.cpp; sourceTree = "<group>"; };
-		698D11082183BFB300FBFDF7 /* Server.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Server.cpp; path = ../../../src/Server.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,16 +57,18 @@
 				698D10FC2183BF9000FBFDF7 /* CrossPlatSock */,
 			);
 			name = Products;
+			path = ../../bin;
 			sourceTree = "<group>";
 		};
 		698D10FE2183BF9000FBFDF7 /* XcPrj */ = {
 			isa = PBXGroup;
 			children = (
-				698D11072183BFB300FBFDF7 /* main.cpp */,
-				698D11082183BFB300FBFDF7 /* Server.cpp */,
-				698D11062183BFB300FBFDF7 /* Server.h */,
+				6915F8AE218451370014E827 /* main.cpp */,
+				6915F8AD218451370014E827 /* Server.cpp */,
+				6915F8AC218451370014E827 /* Server.h */,
 			);
-			path = XcPrj;
+			name = XcPrj;
+			path = ../../src;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -125,8 +127,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				698D110A2183BFB300FBFDF7 /* Server.cpp in Sources */,
-				698D11092183BFB300FBFDF7 /* main.cpp in Sources */,
+				6915F8B0218451370014E827 /* main.cpp in Sources */,
+				6915F8AF218451370014E827 /* Server.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -252,7 +254,7 @@
 				DSTROOT = debug;
 				INSTALL_PATH = debug;
 				PRODUCT_NAME = CrossPlatSock;
-				SYMROOT = ../bin;
+				SYMROOT = "/Volumes/StorEDGE/Alby/Programming/C++/socket/cross-platform-socket/bin";
 			};
 			name = Debug;
 		};
@@ -264,7 +266,7 @@
 				DSTROOT = debug;
 				INSTALL_PATH = debug;
 				PRODUCT_NAME = CrossPlatSock;
-				SYMROOT = ../bin;
+				SYMROOT = "/Volumes/StorEDGE/Alby/Programming/C++/socket/cross-platform-socket/bin";
 			};
 			name = Release;
 		};

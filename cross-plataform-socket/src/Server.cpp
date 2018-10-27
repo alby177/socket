@@ -67,15 +67,15 @@ int Server::SockCreate()
 
 #else
 
-	  // Create socket
-	  mSockAddrServ = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    // Create socket
+    mSockAddrServ = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
-	  // Verify that the socket working
-	  if (mSockAddrServ < 0)
-	  {
+    // Verify that the socket working
+    if (mSockAddrServ < 0)
+    {
 		std::cout << "Cannot create socket" << std::endl;
 		return 1;
-	  }
+    }
 
 #endif
 	return mSockAddrServ;
@@ -118,7 +118,7 @@ int Server::SockListen()
 	int result			{0};			// Result value
 
 	// Wait for a client connection
-    result = listen(mSockAddrServ, 200);
+    result = listen(mSockAddrServ, 5);
     if (result == -1 ) {
     	std::cout << "listen failed with error" << std::endl;
     	SockClose(mSockAddrServ);
@@ -150,30 +150,33 @@ int Server::SockAccept()
 
 std::string Server::SockReceive()
 {
-	long result					{0};							// Result value
-	char *bufRcv				{(char*)""};							// Message received buffer
+	long result					    {0};							// Result value
+	char bufRcv[500]				{""};					        // Message received buffer
 
 	// Receive the message
-	result = recv(mSockAddrClient, bufRcv, sizeof(bufRcv), 0);
+	result = recv(mSockAddrClient, &bufRcv, sizeof(bufRcv), 0);
 	if (result < 0)
 	{
+        std::cout << result << std::endl;
         SockClose(mSockAddrClient);
         SockClose(mSockAddrServ);
 		return "Error receiving message, socket closed\n";
 	}
-
-	return std::to_string(*bufRcv);
+    
+    return std::string(bufRcv);
 }
 
 
 int Server::SockSend(std::string bufSend)
 {
 	unsigned long byteCount				{0};							// Number of byte sent
+    const char *msgToSend               {bufSend.c_str()};              // Message to send
 
 	// Send message
-	byteCount = send(mSockAddrClient, bufSend.c_str(), strlen(bufSend.c_str()) + 1, 0);
+	byteCount = send(mSockAddrClient, msgToSend, strlen(msgToSend) + 1, 0);
     std::cout << byteCount << std::endl;
-	if (byteCount != strlen(bufSend.c_str()) + 1)
+    std::cout << msgToSend << std::endl;
+	if (byteCount != strlen(msgToSend) + 1)
 	{
 		std::cout << "Message send failed" << std::endl;
 		SockClose(mSockAddrClient);

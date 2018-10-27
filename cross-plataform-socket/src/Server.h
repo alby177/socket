@@ -38,8 +38,9 @@ public:
 	int SockAccept();												// Socket accept
 	std::string SockReceive();										// Socket receive
 	int SockSend(std::string bufSend);								// Socket send
-	void SockClose(int sockAddr);									// Socket close
-
+	void SockClose(int sockAddr);				                    // Socket close
+    int GetSockAddrServ() {return mSockAddrServ;};                  // Socket address getter
+    
 private:
 	unsigned short mPort				{0};						// Server port number
 	int mSockAddrServ					{0};						// Socket server address
