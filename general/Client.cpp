@@ -15,6 +15,13 @@ int main(int argc, const char *argv[])
   unsigned short port = 2000;         // Server port
   bool connected = false;             // Client connection flag
   unsigned int connectionTries = 0;   // Connection tries accumulator
+  char IPAddr[20] = "127.0.0.1";
+
+  // Check for user IP address
+  if (argc == 2)
+    strcpy(IPAddr, argv[1]);
+
+  std::cout << "Connecting to: " << IPAddr << std::endl;
 
   // Create socket and verify the socket working
   if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
@@ -28,7 +35,7 @@ int main(int argc, const char *argv[])
 
   // Set the socket structure as the open socket
   saddr.sin_family = AF_INET;
-  saddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+  saddr.sin_addr.s_addr = inet_addr(IPAddr);
   saddr.sin_port = htons(port);
 
   // Connect to server socket and verify connection
@@ -65,17 +72,17 @@ int main(int argc, const char *argv[])
   int sizeSend = 0;           // Size of the message sent
 
   // Check for command line inputs
-  if (argc > 2)
+  if (argc > 3)
 {
     std::cout << "Too many command line input" << std::endl;
     return 0;
   }
-  else if (argc == 2)
+  else if (argc == 3)
   {
     // Save command line message
-    strcpy(msgSend, argv[1]);
+    strcpy(msgSend, argv[2]);
   }
-  else if (argc == 1)
+  else if (argc == 1 || argc == 2)
     manualMessage = true;
 
   // Check for server termination message
