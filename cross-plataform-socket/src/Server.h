@@ -9,12 +9,12 @@
 #define SERVER_H_
 
 #include <iostream>
-#include <string>
+#include <fcntl.h>
 #define DEFAULT_PORT "27015"
 
 #ifdef _WIN32
   #ifndef _WIN32_WINNT
-    #define _WIN32_WINNT_WIN7 0x0601  /* Windows 7. */
+    #define _WIN32_WINNT_WIN10 0x0A00 // Windows 10
   #endif
   #include <winsock2.h>
   #include <ws2tcpip.h>
@@ -37,15 +37,17 @@ public:
 	int SockBind();													// Socket binding
 	int SockListen();												// Socket listen
 	int SockAccept();												// Socket accept
-	std::string SockReceive();										// Socket receive
+	int SockReceive();										        // Socket receive
 	int SockSend(std::string bufSend);								// Socket send
 	void SockClose(int sockAddr);				                    // Socket close
     int GetSockAddrServ() {return mSockAddrServ;};                  // Socket address getter
+    std::string GetMessageReceived() {return msgRcv;};              // Message received getter
 
 private:
 	unsigned short mPort				{0};						// Server port number
 	int mSockAddrServ					{0};						// Socket server address
 	int mSockAddrClient					{0};						// Socket client address
+    std::string msgRcv                  {""};                       // Message received from client
 
 #ifdef _WIN32
 	struct addrinfo mSAddr;											// Server configuration structure Windows
@@ -55,7 +57,5 @@ private:
 	struct sockaddr_in mSAddr;										// Server configuration structure Unix
 	struct sockaddr_in mCAddr;										// Client configuration structure Unix
 #endif
-
 };
-
 #endif /* SERVER_H_ */

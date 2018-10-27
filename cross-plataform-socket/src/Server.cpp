@@ -12,14 +12,16 @@ Server::Server(unsigned short port)
 	// Save port number
 	mPort = port;
 
-	// Reset configuration structure
+	// Set configuration structure
 #ifdef _WIN32
+    
 	ZeroMemory(&mSAddr, sizeof(mSAddr));
 	mSAddr.ai_family = AF_INET;
 	mSAddr.ai_socktype = SOCK_STREAM;
 	mSAddr.ai_protocol = IPPROTO_TCP;
 	mSAddr.ai_flags = AI_PASSIVE;
 #else
+    
 	memset(&mSAddr, '\0', sizeof(mSAddr));
 	mSAddr.sin_family = AF_INET;
 	mSAddr.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -27,16 +29,16 @@ Server::Server(unsigned short port)
 #endif
 }
 
-Server::~Server() {
-	// TODO Auto-generated destructor stub
+Server::~Server()
+{
 }
 
 int Server::SockCreate()
 {
 #ifdef _WIN32
 
-	int result			{0};			// Result value
-	WSADATA wsaData;					// Windows socket implementation information info
+	int result                        {0};                                // Result value
+	WSADATA wsaData;					                                  // Windows socket implementation information info
 
 	// Initialize Winsock
 	result = WSAStartup(MAKEWORD(2,2), &wsaData);
@@ -64,26 +66,25 @@ int Server::SockCreate()
 		WSACleanup();
 		return 1;
 	}
-
 #else
 
     // Create socket
     mSockAddrServ = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
-    // Verify that the socket working
+    // Check socket creation
     if (mSockAddrServ < 0)
     {
 		std::cout << "Cannot create socket" << std::endl;
 		return 1;
     }
-
 #endif
+    
 	return mSockAddrServ;
 }
 
 int Server::SockBind()
 {
-	int result			{0};			// Result value
+	int result                        {0};                                // Result value
 
 #ifdef _WIN32
 
@@ -92,8 +93,7 @@ int Server::SockBind()
 	if (result == SOCKET_ERROR) {
 		std::cout << "bind failed with error: " << WSAGetLastError() << std::endl;
 		freeaddrinfo(mResult);
-		closesocket(mSockAddrServ);
-		WSACleanup();
+        SockClose(mSockAddrServ);
 		return 1;
 	}
 
@@ -107,7 +107,6 @@ int Server::SockBind()
 	   close(mSockAddrServ);
 	   return 1;
 	 }
-
 #endif
 
 	return result;
@@ -115,7 +114,7 @@ int Server::SockBind()
 
 int Server::SockListen()
 {
-	int result			{0};			// Result value
+	int result			            {0};			                    // Result value
 
 	// Wait for a client connection
     result = listen(mSockAddrServ, 5);
@@ -125,45 +124,49 @@ int Server::SockListen()
        return 1;
     }
 
+    // Set socket as non-blocking
+#ifdef _WIN32
+    
+    u_long iMode    {0};
+    
+    if(ioctlsocket(mSockAddrServ, FIONBIO, &iMode) != NO_ERROR)
+        std::cout << "Cannot set socket as non-blocking" << std::endl;
+#else
+
+    fcntl(mSockAddrServ, F_SETFL, O_NONBLOCK);
+#endif
+    
     return result;
 }
 
 int Server::SockAccept()
 {
-	int result					{-1};							// Result value
-	socklen_t sockClientLenght		{sizeof(sockClientLenght)};		// Socket client address lenght
+	int result					    {-1};							    // Result value
+	socklen_t sockClientLenght		{sizeof(sockClientLenght)};		    // Socket client address lenght
+    
+    // Accept client connection
+    mSockAddrClient = accept(mSockAddrServ, (sockaddr *) &mSockAddrClient, &sockClientLenght);
 
-	// Accept a client socket
-	mSockAddrClient = accept(mSockAddrServ, (sockaddr *) &mSockAddrClient, &sockClientLenght);
-	if (mSockAddrClient < 0) {
-		std::cout << "accept failed with error" << std::endl;
-		SockClose(mSockAddrClient);
-		SockClose(mSockAddrServ);
-		return 1;
-	}
-	else
+    // Check for client connected
+	if(mSockAddrClient >= 0)
 		result = 0;
-
+    
 	return result;
 }
 
 
-std::string Server::SockReceive()
+int Server::SockReceive()
 {
-	long result					    {0};							// Result value
-	char bufRcv[500]				{""};					        // Message received buffer
+	long result					        {0};							// Result value
+	char bufRcv[500]				    {""};					        // Message received buffer
 
-	// Receive the message
-	result = recv(mSockAddrClient, &bufRcv, sizeof(bufRcv), 0);
-	if (result < 0)
-	{
-        std::cout << result << std::endl;
-        SockClose(mSockAddrClient);
-        SockClose(mSockAddrServ);
-		return "Error receiving message, socket closed\n";
-	}
+    // Receive data from client
+    result = recv(mSockAddrClient, &bufRcv, sizeof(bufRcv), 0);
     
-    return std::string(bufRcv);
+    // Save received message
+    msgRcv.assign(bufRcv);
+    
+    return (int)result;
 }
 
 
@@ -172,10 +175,8 @@ int Server::SockSend(std::string bufSend)
 	unsigned long byteCount				{0};							// Number of byte sent
     const char *msgToSend               {bufSend.c_str()};              // Message to send
 
-	// Send message
+	// Send message passed as argument
 	byteCount = send(mSockAddrClient, msgToSend, strlen(msgToSend) + 1, 0);
-    std::cout << byteCount << std::endl;
-    std::cout << msgToSend << std::endl;
 	if (byteCount != strlen(msgToSend) + 1)
 	{
 		std::cout << "Message send failed" << std::endl;
@@ -185,11 +186,11 @@ int Server::SockSend(std::string bufSend)
 	}
 	else
 		return 0;
-
 }
 
 void Server::SockClose(int sockAddr)
 {
+    // Close socket connection
 #ifdef _WIN32
 
 	closesocket(sockAddr);
