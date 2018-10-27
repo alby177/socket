@@ -9,9 +9,6 @@
 
 Server::Server(unsigned short port)
 {
-	// Save port number
-	mPort = port;
-
 	// Set configuration structure
 #ifdef _WIN32
     

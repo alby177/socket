@@ -9,8 +9,20 @@
 #include <iostream>
 #include <string>
 #include "Server.h"
+#include "Client.h"
 
-int main() {
+int main(int argc, char *argv[]) {
+    
+    // Check for command line arguments
+    if (argc > 3 || argc < 2)
+    {
+        std::cout << "Wrong number of parameters, check documentation" << std::endl;
+        return 1;
+    }
+    
+    //  ===============================================
+    //  || TO DO -> Select server or client execution ||
+    //  ===============================================
 
 	Server server1(2000);                               // Server instance
 

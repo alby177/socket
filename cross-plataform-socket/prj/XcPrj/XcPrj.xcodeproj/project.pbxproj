@@ -10,6 +10,7 @@
 		6915F8AF218451370014E827 /* Server.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6915F8AD218451370014E827 /* Server.cpp */; };
 		6915F8B0218451370014E827 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6915F8AE218451370014E827 /* main.cpp */; };
 		698D110C2183C9A900FBFDF7 /* CrossPlatSock in CopyFiles */ = {isa = PBXBuildFile; fileRef = 698D10FC2183BF9000FBFDF7 /* CrossPlatSock */; };
+		69D1BA4921850F34002EF720 /* Client.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 69D1BA4721850F34002EF720 /* Client.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -30,6 +31,8 @@
 		6915F8AD218451370014E827 /* Server.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Server.cpp; sourceTree = "<group>"; };
 		6915F8AE218451370014E827 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		698D10FC2183BF9000FBFDF7 /* CrossPlatSock */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CrossPlatSock; sourceTree = BUILT_PRODUCTS_DIR; };
+		69D1BA4721850F34002EF720 /* Client.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Client.cpp; sourceTree = "<group>"; };
+		69D1BA4821850F34002EF720 /* Client.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Client.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +69,8 @@
 				6915F8AE218451370014E827 /* main.cpp */,
 				6915F8AD218451370014E827 /* Server.cpp */,
 				6915F8AC218451370014E827 /* Server.h */,
+				69D1BA4721850F34002EF720 /* Client.cpp */,
+				69D1BA4821850F34002EF720 /* Client.h */,
 			);
 			name = XcPrj;
 			path = ../../src;
@@ -129,6 +134,7 @@
 			files = (
 				6915F8B0218451370014E827 /* main.cpp in Sources */,
 				6915F8AF218451370014E827 /* Server.cpp in Sources */,
+				69D1BA4921850F34002EF720 /* Client.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
