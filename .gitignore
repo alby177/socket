@@ -9,3 +9,9 @@
 
 # Ignore all files created by mac
 ._*
+
+# Ignore bin directory
+cross-platform-socket/bin/
+
+#Ignore debug directory
+cross-platform-socket/debug

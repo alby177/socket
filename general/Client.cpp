@@ -64,10 +64,9 @@ int main(int argc, const char *argv[])
   bool manualMessage = false; // Flag for manual message
   int sizeSend = 0;           // Size of the message sent
 
-  // Check for inputs
+  // Check for command line inputs
   if (argc > 2)
-  {
-    // Stop program execution
+{
     std::cout << "Too many command line input" << std::endl;
     return 0;
   }
@@ -79,6 +78,7 @@ int main(int argc, const char *argv[])
   else if (argc == 1)
     manualMessage = true;
 
+  // Check for server termination message
   while(strcmp(msgSend, "Muori") != 0 && strcmp(msgSend, "muori") != 0)
   {
     if (manualMessage == true)

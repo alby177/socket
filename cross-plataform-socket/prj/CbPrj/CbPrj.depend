@@ -1,0 +1,19 @@
+# depslib dependency file v1.0
+1540562822 source:/media/sf_Lavoro/Programmazione/CrossPlatSocket/src/main.cpp
+	<iostream>
+	<string>
+	"Server.h"
+
+1540563952 /media/sf_Lavoro/Programmazione/CrossPlatSocket/src/Server.h
+	<iostream>
+	<string>
+	<winsock2.h>
+	<ws2tcpip.h>
+	<windows.h>
+	<sys/socket.h>
+	<arpa/inet.h>
+	<netinet/in.h>
+	<stdio.h>
+	<netdb.h>
+	<unistd.h>
+
