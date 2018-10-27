@@ -24,6 +24,7 @@
   #include <arpa/inet.h>
   #include <netinet/in.h>
   #include <stdio.h>
+  #include <string.h>
   #include <netdb.h>  /* Needed for getaddrinfo() and freeaddrinfo() */
   #include <unistd.h> /* Needed for close() */
 #endif
@@ -40,7 +41,7 @@ public:
 	int SockSend(std::string bufSend);								// Socket send
 	void SockClose(int sockAddr);				                    // Socket close
     int GetSockAddrServ() {return mSockAddrServ;};                  // Socket address getter
-    
+
 private:
 	unsigned short mPort				{0};						// Server port number
 	int mSockAddrServ					{0};						// Socket server address

@@ -17,3 +17,22 @@
 	<netdb.h>
 	<unistd.h>
 
+1540642035 source:/home/pi/Desktop/Alby/Programming/C++/socket/cross-plataform-socket/src/main.cpp
+	<iostream>
+	<string>
+	"Server.h"
+
+1540642801 /home/pi/Desktop/Alby/Programming/C++/socket/cross-plataform-socket/src/Server.h
+	<iostream>
+	<string>
+	<winsock2.h>
+	<ws2tcpip.h>
+	<windows.h>
+	<sys/socket.h>
+	<arpa/inet.h>
+	<netinet/in.h>
+	<stdio.h>
+	<string.h>
+	<netdb.h>
+	<unistd.h>
+
