@@ -27,7 +27,7 @@ Client::Client(const char* IPAddress, unsigned short port)
     
     memset(&mCAddr, '\0', sizeof(mCAddr));
     mCAddr.sin_family = AF_INET;
-    mCAddr.sin_addr.s_addr = htonl(*IPAddress);
+    mCAddr.sin_addr.s_addr = inet_addr(IPAddress);
     mCAddr.sin_port = htons(port);
 #endif
 }
@@ -120,7 +120,7 @@ int Client::SockReceive()
     char bufRcv[500]                        {""};                           // Message received buffer
     
     // Receive data from client
-    result = recv(mSockConnect, &bufRcv, sizeof(bufRcv), 0);
+    result = recv(mSockConnect, bufRcv, sizeof(bufRcv), 0);
     
     // Save received message
     msgRcv.assign(bufRcv);
@@ -135,10 +135,12 @@ int Client::SockSend(std::string bufSend)
     
     // Send message passed as argument
     byteCount = send(mSockConnect, msgToSend, strlen(msgToSend) + 1, 0);
+    std::cout << byteCount << " , " << strlen(msgToSend) + 1 << std::endl;
     if (byteCount != strlen(msgToSend) + 1)
     {
         std::cout << "Message send failed" << std::endl;
         SockClose(mSockConnect);
+        SockClose(mSockAddr);
         return 1;
     }
     else

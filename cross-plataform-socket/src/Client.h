@@ -38,9 +38,11 @@ public:
     ~Client();                                                      // Destructor
     int SockCreate();                                               // Socket creation
     int SockConnect();                                              // Socket connect
-    void SockClose(int sockAddr);                                   // Socket close
     int SockReceive();                                              // Socket receive
     int SockSend(std::string bufSend);                              // Socket send
+    void SockClose(int sockAddr);                                   // Socket close
+    std::string GetReceivedMsg() {return msgRcv;};                  // Received message getter
+    int GetSockConnAddr() {return mSockConnect;};                   // Connected socket number getter
     
 private:
     char* mIPAddr                       {(char*)""};                // IP address for client connection
