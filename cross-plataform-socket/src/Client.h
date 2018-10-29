@@ -34,32 +34,31 @@
 class Client
 {
 public:
-    Client(const char* IPAddress = "127.0.0.1", unsigned short port = 2000);            // Constructor
-    ~Client();                                                      // Destructor
-    int SockCreate();                                               // Socket creation
-    int SockConnect();                                              // Socket connect
-    int SockReceive();                                              // Socket receive
-    int SockSend(std::string bufSend);                              // Socket send
-    void SockClose(int sockAddr);                                   // Socket close
-    std::string GetReceivedMsg() {return msgRcv;};                  // Received message getter
-    int GetSockConnAddr() {return mSockConnect;};                   // Connected socket number getter
-    
+    Client(const char *IPAddress = "127.0.0.1", unsigned short port = 2000);            // Constructor
+    ~Client();                                                                          // Destructor
+    int SockCreate();                                                                   // Socket creation
+    int SockConnect();                                                                  // Socket connect
+    int SockReceive();                                                                  // Socket receive
+    int SockSend(std::string bufSend);                                                  // Socket send
+    void SockClose(int sockAddr);                                                       // Socket close
+    std::string GetReceivedMsg()    {return msgRcv;};                                   // Received message getter
+    int GetSockAddr()               {return mSockAddr;};                                // Connected socket number getter
+
 private:
-    char* mIPAddr                       {(char*)""};                // IP address for client connection
-    unsigned short mPort                {0};                        // Port for client connection
-    int mSockAddr                       {0};                        // Socket created
-    int mSockConnect                    {0};                        // Socket for client connection
-    std::string msgRcv                  {""};                       // Message received from server
-    
+    const char *mIPAddr             {};                                                 // IP address for client connection
+    unsigned short mPort            {0};                                                // Port for client connection
+    int mSockAddr                   {-1};                                               // Socket created
+    std::string msgRcv              {""};                                               // Message received from server
+
 #ifdef _WIN32
-    struct addrinfo mSAddr;                                         // Server configuration structure Windows
-    struct addrinfo *mResult            {nullptr};                  // Server configuration resolved address structure Windows
-    struct addrinfo mCAddr;                                         // Client configuration structure Windows
+    struct addrinfo mSAddr;                                                             // Server configuration structure Windows
+    struct addrinfo *mResult            {nullptr};                                      // Server configuration resolved address structure Windows
+    struct addrinfo mCAddr;                                                             // Client configuration structure Windows
 #else
-    
-    struct sockaddr_in mCAddr;                                      // Client configuration structure Unix
+
+    struct sockaddr_in mCAddr;                                                          // Client configuration structure Unix
 #endif
-    
+
 };
 
 #endif /* Client_hpp */

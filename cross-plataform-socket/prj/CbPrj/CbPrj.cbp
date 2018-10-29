@@ -7,8 +7,8 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin/Debug/CbPrj" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj/Debug/" />
+				<Option output="../../bin/Debug/CbPrj" prefix_auto="1" extension_auto="1" />
+				<Option object_output="../../bin" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
@@ -17,8 +17,8 @@
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output="bin/Release/CbPrj" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj/Release/" />
+				<Option output="../../bin/Release/CbPrj" prefix_auto="1" extension_auto="1" />
+				<Option object_output="../../bin" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
@@ -33,6 +33,8 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="../../src/Client.cpp" />
+		<Unit filename="../../src/Client.h" />
 		<Unit filename="../../src/Server.cpp" />
 		<Unit filename="../../src/Server.h" />
 		<Unit filename="../../src/main.cpp" />

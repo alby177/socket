@@ -9,20 +9,23 @@
 
 Server::Server(unsigned short port)
 {
+    // Save port number
+    mPort = port;
+
 	// Set configuration structure
 #ifdef _WIN32
-    
+
 	ZeroMemory(&mSAddr, sizeof(mSAddr));
 	mSAddr.ai_family = AF_INET;
 	mSAddr.ai_socktype = SOCK_STREAM;
 	mSAddr.ai_protocol = IPPROTO_TCP;
 	mSAddr.ai_flags = AI_PASSIVE;
 #else
-    
+
 	memset(&mSAddr, '\0', sizeof(mSAddr));
 	mSAddr.sin_family = AF_INET;
 	mSAddr.sin_addr.s_addr = htonl(INADDR_ANY);
-	mSAddr.sin_port = htons(port);
+	mSAddr.sin_port = htons(mPort);
 #endif
 }
 
@@ -75,7 +78,7 @@ int Server::SockCreate()
 		return 1;
     }
 #endif
-    
+
 	return mSockAddrServ;
 }
 
@@ -123,16 +126,16 @@ int Server::SockListen()
 
     // Set socket as non-blocking
 #ifdef _WIN32
-    
+
     u_long iMode    {0};
-    
+
     if(ioctlsocket(mSockAddrServ, FIONBIO, &iMode) != NO_ERROR)
         std::cout << "Cannot set socket as non-blocking" << std::endl;
 #else
 
     fcntl(mSockAddrServ, F_SETFL, O_NONBLOCK);
 #endif
-    
+
     return result;
 }
 
@@ -140,14 +143,14 @@ int Server::SockAccept()
 {
 	int result					    {-1};							    // Result value
 	socklen_t sockClientLenght		{sizeof(sockClientLenght)};		    // Socket client address lenght
-    
+
     // Accept client connection
     mSockAddrClient = accept(mSockAddrServ, (sockaddr *) &mSockAddrClient, &sockClientLenght);
 
     // Check for client connected
 	if(mSockAddrClient >= 0)
 		result = 0;
-    
+
 	return result;
 }
 
@@ -159,10 +162,10 @@ int Server::SockReceive()
 
     // Receive data from client
     result = recv(mSockAddrClient, &bufRcv, sizeof(bufRcv), 0);
-    
+
     // Save received message
     msgRcv.assign(bufRcv);
-    
+
     return (int)result;
 }
 
