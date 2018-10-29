@@ -9,6 +9,7 @@
 #include <iostream>
 #include <string>
 #include <stdio.h>
+#include <unistd.h>
 #include "Server.h"
 #include "Client.h"
 
@@ -111,8 +112,7 @@ int main(int argc, char *argv[]) {
 
         std::cout << "Client is trying to connect at " << mIPAddr << " on port " << mPort << std::endl;
 
-        //Client client1(mIPAddr, mPort);                                                       // Client instance
-        Client client1;
+        Client client1(mIPAddr, mPort);                                                       // Client instance
 
         // Create socket
         if (client1.SockCreate() == 1)

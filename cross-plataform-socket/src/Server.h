@@ -14,7 +14,8 @@
 
 #ifdef _WIN32
   #ifndef _WIN32_WINNT
-    #define _WIN32_WINNT_WIN10 0x0A00 // Windows 10
+    //#define _WIN32_WINNT_WIN10 0x0A00 // Windows 10
+	#define _WIN32_WINNT_WIN7 0x0601 // Windows 7
   #endif
   #include <winsock2.h>
   #include <ws2tcpip.h>

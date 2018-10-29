@@ -161,7 +161,7 @@ int Server::SockReceive()
 	char bufRcv[500]				    {""};					        // Message received buffer
 
     // Receive data from client
-    result = recv(mSockAddrClient, &bufRcv, sizeof(bufRcv), 0);
+    result = recv(mSockAddrClient, bufRcv, sizeof(bufRcv), 0);
 
     // Save received message
     msgRcv.assign(bufRcv);

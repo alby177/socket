@@ -44,6 +44,7 @@ int Client::SockCreate()
 #ifdef _WIN32
 
     WSADATA wsaData;                                                      // Windows socket implementation information info
+    char port[10]					  {};								  // Port number used for connection
 
     // Initialize Winsock
     result = WSAStartup(MAKEWORD(2,2), &wsaData);
@@ -53,8 +54,11 @@ int Client::SockCreate()
         return 1;
     }
 
+    // Save port number into a C string
+    sprintf(port, "%d", mPort);
+
     // Resolve the server address and port
-    result = getaddrinfo(mIPAddr, mPort, &mSAddr, &mResult);
+    result = getaddrinfo(mIPAddr, port, &mCAddr, &mResult);
     if ( result != 0 )
     {
         std::cout << "getaddrinfo failed with error: " << result << std::endl;
@@ -63,8 +67,8 @@ int Client::SockCreate()
     }
 
     // Create a SOCKET for connecting to server
-    mSockConnect = socket(mResult->ai_family, mResult->ai_socktype, mResult->ai_protocol);
-    if (mSockAddrServ == int(INVALID_SOCKET))
+    mSockAddr = socket(mResult->ai_family, mResult->ai_socktype, mResult->ai_protocol);
+    if (mSockAddr == int(INVALID_SOCKET))
     {
         std::cout << "socket failed with error: " << WSAGetLastError() << std::endl;
         freeaddrinfo(mResult);
@@ -92,18 +96,11 @@ int Client::SockConnect()
 {
 #ifdef _WIN32
 
-    // Connect socket to server
-    mSockConnect = socket(mCAddr->ai_family, mCAddr->ai_socktype, mCAddr->ai_protocol);
-    if (ConnectSocket == INVALID_SOCKET) {
-        printf("socket failed with error: %ld\n", WSAGetLastError());
-        WSACleanup();
-        return 1;
-    }
-
-    return 0;
+	// Connect to server.
+	return(connect(mSockAddr, mResult->ai_addr, (int)mResult->ai_addrlen));
 #else
 
-    // Connect socket to server
+    // Connect to server
     return(connect(mSockAddr, (struct sockaddr *) &mCAddr, sizeof(mCAddr)));
 #endif
 }
@@ -114,7 +111,7 @@ int Client::SockReceive()
     char bufRcv[500]                        {""};                           // Message received buffer
 
     // Receive data from client
-    result = recv(mSockAddr, &bufRcv, sizeof(bufRcv), 0);
+    result = recv(mSockAddr, bufRcv, sizeof(bufRcv), 0);
 
     // Save received message
     msgRcv.assign(bufRcv);
@@ -129,7 +126,6 @@ int Client::SockSend(std::string bufSend)
 
     // Send message passed as argument
     byteCount = send(mSockAddr, msgToSend, strlen(msgToSend), 0);
-    std::cout << byteCount << " instead of " << strlen(msgToSend) << std::endl;
     if (byteCount != strlen(msgToSend))
     {
         std::cout << "Message send failed" << std::endl;
