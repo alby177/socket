@@ -13,8 +13,11 @@
 # Ignore bin directory
 cross-platform-socket/bin/
 
-#Ignore debug directory
+# Ignore debug directory
 cross-platform-socket/debug
 
-#Ignore objects
+# Ignore objects
 *.o
+
+# Ignore executable files
+*.exe
