@@ -14,8 +14,8 @@ HEADERS += \
 
 LIBS += -lws2_32
 
-Debug:DESTDIR = ../../../bin/debug
-Debug:OBJECTS_DIR = ../../../bin/debug/.obj
-Debug:MOC_DIR = ../../../bin/debug/.moc
-Debug:RCC_DIR = ../../../bin/debug/.rcc
-Debug:UI_DIR = ../../../bin/debug/.ui
+Debug:DESTDIR = ../../../bin/debug/Qt
+Debug:OBJECTS_DIR = ../../../bin/debug/Qt
+Debug:MOC_DIR = ../../../bin/debug/Qt
+Debug:RCC_DIR = ../../../bin/debug/Qt
+Debug:UI_DIR = ../../../bin/debug/Qt

@@ -79,10 +79,10 @@
 1540813492 source:/home/a-gotta/Desktop/Programming/c++/socket/cross-plataform-socket/src/Client.cpp
 	"Client.h"
 
-1540820030 source:/media/sf_Lavoro/Programmazione/socket/cross-plataform-socket/src/Server.cpp
+1541505235 source:/media/sf_Lavoro/Programmazione/socket/cross-plataform-socket/src/Server.cpp
 	"Server.h"
 
-1540824292 /media/sf_Lavoro/Programmazione/socket/cross-plataform-socket/src/Server.h
+1541504487 /media/sf_Lavoro/Programmazione/socket/cross-plataform-socket/src/Server.h
 	<iostream>
 	<fcntl.h>
 	<winsock2.h>
@@ -96,10 +96,10 @@
 	<netdb.h>
 	<unistd.h>
 
-1540827522 source:/media/sf_Lavoro/Programmazione/socket/cross-plataform-socket/src/Client.cpp
+1541517985 source:/media/sf_Lavoro/Programmazione/socket/cross-plataform-socket/src/Client.cpp
 	"Client.h"
 
-1540824292 /media/sf_Lavoro/Programmazione/socket/cross-plataform-socket/src/Client.h
+1541517878 /media/sf_Lavoro/Programmazione/socket/cross-plataform-socket/src/Client.h
 	<iostream>
 	<fcntl.h>
 	<winsock2.h>
@@ -113,11 +113,11 @@
 	<netdb.h>
 	<unistd.h>
 
-1540825728 source:/media/sf_Lavoro/Programmazione/socket/cross-plataform-socket/src/main.cpp
+1541514897 source:/media/sf_Lavoro/Programmazione/socket/cross-plataform-socket/src/main.cpp
 	<iostream>
 	<string>
-	<stdio.h>
-	<unistd.h>
+	<chrono>
+	<thread>
 	"Server.h"
 	"Client.h"
 

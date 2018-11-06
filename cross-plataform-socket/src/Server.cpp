@@ -16,10 +16,10 @@ Server::Server(unsigned short port)
 #ifdef _WIN32
 
 	ZeroMemory(&mSAddr, sizeof(mSAddr));
-	mSAddr.ai_family = AF_INET;
-	mSAddr.ai_socktype = SOCK_STREAM;
-	mSAddr.ai_protocol = IPPROTO_TCP;
-	mSAddr.ai_flags = AI_PASSIVE;
+    mSAddr.ai_family = AF_INET;
+    mSAddr.ai_socktype = SOCK_STREAM;
+    mSAddr.ai_protocol = IPPROTO_TCP;
+    mSAddr.ai_flags = AI_PASSIVE;
 #else
 
 	memset(&mSAddr, '\0', sizeof(mSAddr));
@@ -48,8 +48,11 @@ int Server::SockCreate()
 		return 1;
 	}
 
-	// Resolve the server address and port
-	result = getaddrinfo(NULL, DEFAULT_PORT, &mSAddr, &mResult);
+    // Convert port number
+    std::string port = std::to_string(mPort);
+
+    // Resolve the server address and port
+    result = getaddrinfo(NULL, port.c_str(), &mSAddr, &mResult);
 	if ( result != 0 )
 	{
 		std::cout << "getaddrinfo failed with error: " << result << std::endl;
@@ -58,7 +61,7 @@ int Server::SockCreate()
 	}
 
 	// Create a SOCKET for connecting to server
-	mSockAddrServ = socket(mResult->ai_family, mResult->ai_socktype, mResult->ai_protocol);
+    mSockAddrServ = socket(mResult->ai_family, mResult->ai_socktype, mResult->ai_protocol);
 	if (mSockAddrServ == int(INVALID_SOCKET))
 	{
 		std::cout << "socket failed with error: " << WSAGetLastError() << std::endl;
@@ -88,8 +91,14 @@ int Server::SockBind()
 
 #ifdef _WIN32
 
+    u_long iMode    {1};                                                // Non-blocking value for windows socket
+
+    // Set socket as non-blocking
+    if(ioctlsocket(mSockAddrServ, FIONBIO, &iMode) != NO_ERROR)
+        std::cout << "Cannot set socket as non-blocking" << std::endl;
+
 	 // Setup the TCP listening socket
-	result = bind(mSockAddrServ, mResult->ai_addr, (int)mResult->ai_addrlen);
+    result = bind(mSockAddrServ, mResult->ai_addr, (int)mResult->ai_addrlen);
 	if (result == SOCKET_ERROR) {
 		std::cout << "bind failed with error: " << WSAGetLastError() << std::endl;
 		freeaddrinfo(mResult);
@@ -125,13 +134,8 @@ int Server::SockListen()
     }
 
     // Set socket as non-blocking
-#ifdef _WIN32
+#ifndef _WIN32
 
-    u_long iMode    {0};
-
-    if(ioctlsocket(mSockAddrServ, FIONBIO, &iMode) != NO_ERROR)
-        std::cout << "Cannot set socket as non-blocking" << std::endl;
-#else
 
     fcntl(mSockAddrServ, F_SETFL, O_NONBLOCK);
 #endif
@@ -144,8 +148,14 @@ int Server::SockAccept()
 	int result					    {-1};							    // Result value
 	socklen_t sockClientLenght		{sizeof(sockClientLenght)};		    // Socket client address lenght
 
+#ifdef _WIN32
+
+    mSockAddrClient = accept(mSockAddrServ, nullptr, nullptr);
+#else
+
     // Accept client connection
     mSockAddrClient = accept(mSockAddrServ, (sockaddr *) &mSockAddrClient, &sockClientLenght);
+#endif
 
     // Check for client connected
 	if(mSockAddrClient >= 0)
@@ -157,7 +167,7 @@ int Server::SockAccept()
 
 int Server::SockReceive()
 {
-	long result					        {0};							// Result value
+    long result					        {-1};							// Result value
 	char bufRcv[500]				    {""};					        // Message received buffer
 
     // Receive data from client
@@ -166,7 +176,7 @@ int Server::SockReceive()
     // Save received message
     msgRcv.assign(bufRcv);
 
-    return (int)result;
+    return static_cast<int>(result);
 }
 
 
@@ -176,8 +186,8 @@ int Server::SockSend(std::string bufSend)
     const char *msgToSend               {bufSend.c_str()};              // Message to send
 
 	// Send message passed as argument
-	byteCount = send(mSockAddrClient, msgToSend, strlen(msgToSend) + 1, 0);
-	if (byteCount != strlen(msgToSend) + 1)
+    byteCount = send(mSockAddrClient, msgToSend, strlen(msgToSend), 0);
+    if (byteCount != strlen(msgToSend))
 	{
 		std::cout << "Message send failed" << std::endl;
 		SockClose(mSockAddrClient);

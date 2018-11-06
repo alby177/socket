@@ -8,8 +8,8 @@
 
 #include <iostream>
 #include <string>
-#include <stdio.h>
-#include <unistd.h>
+#include <chrono>
+#include <thread>
 #include "Server.h"
 #include "Client.h"
 
@@ -47,15 +47,14 @@ int main(int argc, char *argv[]) {
         std::cout << "Socket is listening, waiting for connections!" << std::endl;
 
         // Waiting for client connection
-        do
+        while(server1.SockAccept() != 0)
         {
             std::cout << ".";
             std::cout.flush();
-            usleep(1000000);
+            std::this_thread::sleep_for(std::chrono::microseconds(1000000));
+        }
 
-        }while(server1.SockAccept() != 0);
-
-        std::cout << "Connected!" << std::endl;
+        std::cout << std::endl << "Connected!" << std::endl;
 
         // Communicate with client
         while(1)
@@ -85,10 +84,14 @@ int main(int argc, char *argv[]) {
 
             // Check for disconnected client
             else if (server1.SockReceive() == 0)
+            {
+                std::cout << "Client disconnected" << std::endl;
                 break;
+            }
         }
 
         // Close socket
+        server1.SockClose(server1.GetSockAddrClient());
         server1.SockClose(server1.GetSockAddrServ());
         std::cout << "Server is down" << std::endl;
     }
@@ -124,9 +127,12 @@ int main(int argc, char *argv[]) {
         while(client1.SockConnect() != 0)
         {
             std::cout << "Trying to connect" << std::endl;
+            std::this_thread::sleep_for(std::chrono::microseconds(1000000));
         }
 
         std::cout << std::endl << "Client connected" << std::endl;
+
+        int result {-1};
 
         // Check for server termination message
         while(1)
@@ -145,9 +151,18 @@ int main(int argc, char *argv[]) {
                 // Check for server kill message
                 if (msgToSend != "Muori" && msgToSend != "muori")
                 {
-                    // Receive message
-                    if (client1.SockReceive() < 0)
-                        return 1;
+                    std::cout << "Waiting to receive message" << std::endl;
+
+                    // Wait for message
+                    while(1)
+                    {
+                        result = client1.SockReceive();
+                        //std::cout << result << std::endl;
+                        if (result > 0)
+                            break;
+                    }
+
+                    std::cout << "Received something" << std::endl;
 
                     // Check for correctly received message
                     if (client1.GetReceivedMsg() != "")
@@ -168,5 +183,4 @@ int main(int argc, char *argv[]) {
         std::cout << "Client is down" << std::endl;
         return 0;
     }
-
 }

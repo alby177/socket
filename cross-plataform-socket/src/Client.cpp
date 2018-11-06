@@ -19,10 +19,14 @@ Client::Client(const char *IPAddress, unsigned short port)
 #ifdef _WIN32
 
     ZeroMemory(&mCAddr, sizeof(mCAddr));
+    /*
     mCAddr.ai_family = AF_INET;
     mCAddr.ai_socktype = SOCK_STREAM;
     mCAddr.ai_protocol = IPPROTO_TCP;
-    mCAddr.ai_flags = AI_PASSIVE;
+    */
+    mCAddr.sin_family = AF_INET;
+    mCAddr.sin_addr.s_addr = inet_addr(mIPAddr);
+    mCAddr.sin_port = htons(mPort);
 #else
 
     memset(&mCAddr, '\0', sizeof(mCAddr));
@@ -53,7 +57,7 @@ int Client::SockCreate()
         std::cout << "WSAStartup failed with error: " << result << std::endl;
         return 1;
     }
-
+    /*
     // Save port number into a C string
     sprintf(port, "%d", mPort);
 
@@ -65,9 +69,11 @@ int Client::SockCreate()
         WSACleanup();
         return 1;
     }
+    */
 
     // Create a SOCKET for connecting to server
-    mSockAddr = socket(mResult->ai_family, mResult->ai_socktype, mResult->ai_protocol);
+    //mSockAddr = socket(mResult->ai_family, mResult->ai_socktype, mResult->ai_protocol);
+    mSockAddr = socket(AF_INET, SOCK_STREAM, 0);
     if (mSockAddr == int(INVALID_SOCKET))
     {
         std::cout << "socket failed with error: " << WSAGetLastError() << std::endl;
@@ -75,6 +81,12 @@ int Client::SockCreate()
         WSACleanup();
         return 1;
     }
+
+    u_long iMode    {1};                                                // Non-blocking value for windows socket
+
+    // Set socket as non-blocking
+    if(ioctlsocket(mSockAddr, FIONBIO, &iMode) != NO_ERROR)
+        std::cout << "Cannot set socket as non-blocking" << std::endl;
 #else
 
     // Create socket
@@ -83,6 +95,8 @@ int Client::SockCreate()
         std::cout << "Cannot create socket" << std::endl;
         return 1;
     }
+
+    fcntl(mSockAddr, F_SETFL, O_NONBLOCK);
 
 #endif
 
@@ -96,8 +110,13 @@ int Client::SockConnect()
 {
 #ifdef _WIN32
 
+    int result {0};
+
 	// Connect to server.
-	return(connect(mSockAddr, mResult->ai_addr, (int)mResult->ai_addrlen));
+    //result = connect(mSockAddr, mResult->ai_addr, static_cast<int>(mResult->ai_addrlen));
+    result = connect(mSockAddr, (struct sockaddr *) &mCAddr, sizeof(mCAddr));
+    std::cout << result << std::endl;
+    return result;
 #else
 
     // Connect to server

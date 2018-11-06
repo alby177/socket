@@ -11,7 +11,7 @@
 
 #include <iostream>
 #include <fcntl.h>
-#define DEFAULT_PORT "27015"
+#define DEFAULT_PORT "2000"
 #define LOCALHOST "127.0.0.1"
 
 #ifdef _WIN32
@@ -52,9 +52,9 @@ private:
     std::string msgRcv              {""};                                               // Message received from server
 
 #ifdef _WIN32
-    struct addrinfo mSAddr;                                                             // Server configuration structure Windows
-    struct addrinfo *mResult            {nullptr};                                      // Server configuration resolved address structure Windows
-    struct addrinfo mCAddr;                                                             // Client configuration structure Windows
+    struct addrinfo *mResult        {nullptr};                                          // Server configuration resolved address structure Windows
+    //struct addrinfo mCAddr;                                                             // Client configuration structure Windows
+    struct sockaddr_in mCAddr;                                                             // Client configuration structure Windows
 #else
 
     struct sockaddr_in mCAddr;                                                          // Client configuration structure Unix
